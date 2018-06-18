@@ -1,0 +1,30 @@
+{
+  "variables": {
+    "image_name": "go-{{timestamp}}",
+    "image_description":"go application image built on ubuntu and nginx"
+    
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "kube-jenkins-imager-duff-0efcaef646ce.json",
+      "project_id": "kube-jenkins-imager-duff",
+      "source_image_family": "ubuntu-1804-lts",
+      "ssh_username": "packer",      
+      "zone": "northamerica-northeast1-a",
+      "image_name":"{{user `image_name`}}",
+      "image_description":"{{user `image_description`}}"      
+    }
+  ],
+  "provisioners": [
+    {
+        "type": "shell",
+        "inline":[
+            "sudo wget https://nginx.org/keys/nginx_signing.key",
+            "sudo apt-key add nginx_signing.key",
+            "sudo apt-get -y update",
+            "sudo apt-get -y install nginx"
+        ]
+    }
+  ]
+}
