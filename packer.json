@@ -7,23 +7,29 @@
   "builders": [
     {
       "type": "googlecompute",
-      "account_file": "kube-jenkins-imager-duff-0efcaef646ce.json",
-      "project_id": "kube-jenkins-imager-duff",
+      "account_file": "account.json",
+      "project_id": "go-dev-329e5779",
       "source_image_family": "ubuntu-1804-lts",
-      "ssh_username": "packer",      
+      "ssh_username": "root",      
       "zone": "northamerica-northeast1-a",
       "image_name":"{{user `image_name`}}",
       "image_description":"{{user `image_description`}}"      
+    },
+    {
+      "type": "docker",
+      "image": "ubuntu:bionic",
+      "commit": true
     }
   ],
   "provisioners": [
     {
         "type": "shell",
         "inline":[
-            "sudo wget https://nginx.org/keys/nginx_signing.key",
-            "sudo apt-key add nginx_signing.key",
-            "sudo apt-get -y update",
-            "sudo apt-get -y install nginx"
+            "apt-get -y update",
+            "apt-get -y install wget gnupg2",
+            "wget https://nginx.org/keys/nginx_signing.key",
+            "apt-key add nginx_signing.key",
+            "apt-get -y install nginx"
         ]
     }
   ]
